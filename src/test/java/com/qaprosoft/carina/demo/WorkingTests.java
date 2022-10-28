@@ -27,7 +27,7 @@ import java.util.Properties;
     
         @Test(priority = 4)
         @MethodOwner(owner = "MattKulka")
-        public void testGetWeatherReportNoGeocode() {
+        public void testGetReportNoGeocode() {
             GetReport api = new GetReport();
             api.replaceUrlPlaceholder("api_request", "null");
             String rs = api.callAPI().asString();
