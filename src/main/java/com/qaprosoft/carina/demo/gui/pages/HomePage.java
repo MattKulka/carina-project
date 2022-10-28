@@ -1,18 +1,3 @@
-/*
- * Copyright 2013-2021 QAPROSOFT (http://qaprosoft.com/).
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.qaprosoft.carina.demo.gui.pages;
 
 import java.lang.invoke.MethodHandles;
@@ -34,39 +19,31 @@ import com.qaprosoft.carina.demo.gui.components.WeValuePrivacyAd;
 public class HomePage extends AbstractPage {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    @FindBy(id = "footmenu")
-    private FooterMenu footerMenu;
+    @FindBy(xpath = "//div[contains(@class,'styles_main-navigation__3aXUl styles_navi__3OKNE')]//a")
+    private List<ExtendedWebElement> mainNavigationLinks;
 
-    @FindBy(xpath = "//div[contains(@class, 'brandmenu-v2')]//a")
-    private List<ExtendedWebElement> brandLinks;
+    @FindBy(xpath = "//div[contains(@class,'styles_semi-oval__2qzbp styles_menu-header__1Iprf')]//a")
+    private List<ExtendedWebElement> orderOnline;
 
-    @FindBy(className = "news-column-index")
-    private ExtendedWebElement newsColumn;
 
     public HomePage(WebDriver driver) {
         super(driver);
-        setUiLoadedMarker(newsColumn);
         setPageAbsoluteURL(R.CONFIG.get(Configuration.Parameter.URL.getKey()));
     }
 
-    public FooterMenu getFooterMenu() {
-        return footerMenu;
-    }
-
-    public BrandModelsPage selectBrand(String brand) {
-        LOGGER.info("selecting '" + brand + "' brand...");
-        for (ExtendedWebElement brandLink : brandLinks) {
-            String currentBrand = brandLink.getText();
+    public void selectBrand(String mainNav) {
+        LOGGER.info("selecting '" + mainNav + "' mainNav...");
+        for (ExtendedWebElement mainNavigationLink : mainNavigationLinks) {
+            String currentBrand = mainNavigationLink.getText();
             LOGGER.info("currentBrand: " + currentBrand);
-            if (brand.equalsIgnoreCase(currentBrand)) {
-                brandLink.click();
-                return new BrandModelsPage(driver);
+            if (mainNav.equalsIgnoreCase(currentBrand)) {
+                mainNavigationLink.click();
             }
         }
-        throw new RuntimeException("Unable to open brand: " + brand);
+        throw new RuntimeException("Unable to select Navigation Option: " + mainNav);
     }
     
-    public WeValuePrivacyAd getWeValuePrivacyAd() {
-    	return new WeValuePrivacyAd(driver);
+    public List<ExtendedWebElement> getOrderOnline() {
+        return orderOnline;
     }
 }

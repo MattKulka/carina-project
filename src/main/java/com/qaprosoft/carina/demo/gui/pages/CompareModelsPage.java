@@ -37,6 +37,8 @@ public class CompareModelsPage extends AbstractPage {
     @FindBy(className = "compare-candidates")
     private ExtendedWebElement compareMenu;
 
+    private ExtendedWebElement findExtendedWebElement;
+
     public CompareModelsPage(WebDriver driver) {
         super(driver);
         setUiLoadedMarker(compareMenu);
@@ -44,6 +46,10 @@ public class CompareModelsPage extends AbstractPage {
         //setPageURL("/compare.php3");
     }
 
+    /**
+     * @param models
+     * @return
+     */
     public List<ModelSpecs> compareModels(String... models) {
         CondidateBlock condidateBlock;
         List<ModelSpecs> modelSpecs = new ArrayList<>();
@@ -53,9 +59,10 @@ public class CompareModelsPage extends AbstractPage {
             condidateBlock = condidateBlocks.get(index);
             condidateBlock.sendKeysToInputField(models[index]);
             condidateBlock.getFirstPhone();
-            for (ModelSpecs.SpecType type : ModelSpecs.SpecType.values()) {
-                ExtendedWebElement spec = findExtendedWebElement(By.xpath(
+            for (final ModelSpecs.SpecType type : ModelSpecs.SpecType.values()) {
+                findExtendedWebElement = findExtendedWebElement(By.xpath(
                         String.format("//tr[.//a[text()='%s']]//td[@class='nfo'][%d]", type.getType(), index + 1)));
+                final ExtendedWebElement spec = findExtendedWebElement;
                 modelSpec.setToModelSpecsMap(type, spec.getText());
             }
             modelSpecs.add(modelSpec);
